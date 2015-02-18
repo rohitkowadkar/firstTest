@@ -1,8 +1,8 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1265\cocoasubrtf210
 {\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;\red92\green38\blue153;\red0\green116\blue0;\red46\green13\blue110;
-\red38\green71\blue75;\red100\green56\blue32;\red170\green13\blue145;\red196\green26\blue22;\red63\green110\blue116;
-\red28\green0\blue207;}
+\red38\green71\blue75;\red100\green56\blue32;\red170\green13\blue145;\red63\green110\blue116;\red28\green0\blue207;
+\red196\green26\blue22;}
 \margl1440\margr1440\vieww25100\viewh17500\viewkind0
 \deftab674
 \pard\tx674\pardeftab674\pardirnatural
@@ -44,34 +44,7 @@ indidfinishlaunching with option\
 \cf7 void\cf0  HandleExceptions(\cf2 NSException\cf0  *exception) \{\
     \
     \
-    // \cf4 NSLog\cf0 (\cf8 @"The app has encountered an unhandled exception: %@"\cf0 , [exception \cf4 description\cf0 ]);\
-    \cf3 // Save application data on crash\cf0 \
-    \cf3 //    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];\cf0 \
-    \
-    \cf3 //    [defaults setObject:@"YES" forKey:@"isCrashed"];\cf0 \
-    \
-    \cf3 //    [defaults setObject:exception forKey:@"ExceptionIs"];\cf0 \
-    \
-    \cf3 //    NSData *myData = [NSData dataWithContentsOfFile:logPath];\cf0 \
-    \
-    \cf2 UIAlertView\cf0  *alert = [[\cf2 UIAlertView\cf0  \cf4 alloc\cf0 ] \cf4 initWithTitle\cf0 :\cf8 @"App Stopped"\cf0 \
-                                                    \cf4 message\cf0 :\cf8 @"Please restart the application!"\cf0 \
-                                                   \cf4 delegate\cf0 :[[\cf2 UIApplication\cf0  \cf4 sharedApplication\cf0 ] \cf4 delegate\cf0 ] \cf4 cancelButtonTitle\cf0 :\cf7 nil\cf0  \cf4 otherButtonTitles\cf0 :\cf8 @"Ok!"\cf0 , \cf7 nil\cf0 ];\
-    \
-    \
-    \cf3 //NSLog(@"%@",[NSThread callStackSymbols]);\cf0 \
-    \
-    [alert \cf4 show\cf0 ];\
-    \
-    \
-    \cf9 errorString\cf0  = [\cf2 NSString\cf0  \cf4 stringWithFormat\cf0 :\cf8 @"Exception: %@\\n\\nStack Trace:%@"\cf0 ,exception,[\cf2 NSThread\cf0  \cf4 callStackSymbols\cf0 ]];\
-    \
-    \
-    \cf7 while\cf0  (\cf9 exceptionAlertDismissed\cf0  == \cf7 FALSE\cf0 )\
-    \{\
-        [[\cf2 NSRunLoop\cf0  \cf4 currentRunLoop\cf0 ] \cf4 runUntilDate\cf0 :[\cf2 NSDate\cf0  \cf4 dateWithTimeIntervalSinceNow\cf0 :\cf10 0.1\cf0 ]];\
-    \}\
-    \
+      \
 \}\
 \
 \
@@ -81,81 +54,49 @@ indidfinishlaunching with option\
     \
     \
     \
-    \cf2 NSString\cf0  *url = \cf7 self\cf0 .\cf9 strUrl\cf0 ;\
+    \cf2 NSString\cf0  *url = \cf7 self\cf0 .\cf8 strUrl\cf0 ;\
     \
-    \cf2 NSString\cf0  *deviceInfo =[\cf2 NSString\cf0  \cf4 stringWithFormat\cf0 :\cf8 @"\\n************ DEVICE INFORMATION ***********\\nBrand: Apple\\nDevice: %@\\nModel: %@\\nId: %@"\cf0 ,[[\cf2 UIDevice\cf0  \cf4 currentDevice\cf0 ] \cf4 name\cf0 ],[[\cf2 UIDevice\cf0  \cf4 currentDevice\cf0 ] \cf4 model\cf0 ],[[\cf2 UIDevice\cf0  \cf4 currentDevice\cf0 ]\cf4 identifierForVendor\cf0 ]];\
-    \
-    \cf2 NSString\cf0  *firmware =[\cf2 NSString\cf0  \cf4 stringWithFormat\cf0 :\cf8 @"\\n************ FIRMWARE ************\\nOS: %@\\nSystem Version: %@"\cf0 ,[[\cf2 UIDevice\cf0  \cf4 currentDevice\cf0 ] \cf4 systemName\cf0 ],[[\cf2 UIDevice\cf0  \cf4 currentDevice\cf0 ] \cf4 systemVersion\cf0 ]];\
-    \
-    \
-    \cf2 NSString\cf0  *cause_of_error=[\cf2 NSString\cf0  \cf4 stringWithFormat\cf0 :\cf8 @"\\n************ CAUSE OF ERROR ************\\n%@"\cf0 ,\cf9 errorString\cf0 ];\
-    \
-    \
-    \
-    \
-    \
-    \cf2 NSString\cf0  *str = [\cf2 NSString\cf0  \cf4 stringWithFormat\cf0 :\cf8 @"device_info=%@&firmware=%@&cause_of_error=%@&app_name=%@&app_version=%@&platform=iOS&app_id=%@"\cf0 ,deviceInfo,firmware,cause_of_error,\cf6 Powered_Client_Name\cf0 ,[[[\cf2 NSBundle\cf0  \cf4 mainBundle\cf0 ] \cf4 infoDictionary\cf0 ] \cf4 objectForKey\cf0 :\cf8 @"CFBundleShortVersionString"\cf0 ],\cf6 POWERED_CLIENT_ID\cf0 ];\
-    \
-    \cf2 NSMutableURLRequest\cf0  *request = [\cf2 NSMutableURLRequest\cf0  \cf4 requestWithURL\cf0 :[\cf2 NSURL\cf0  \cf4 URLWithString\cf0 :[url \cf4 stringByAppendingString\cf0 :\cf8 @"app_exceptions.php"\cf0 ]]];\
-    \
-    \
-    \
-    \cf2 NSData\cf0  *postData = [str \cf4 dataUsingEncoding\cf0 :\cf4 NSASCIIStringEncoding\cf0  \cf4 allowLossyConversion\cf0 :\cf7 YES\cf0 ];\
-    \
-    [request \cf4 setHTTPMethod\cf0 :\cf8 @"POST"\cf0 ];\
-    \
-    [request \cf4 setValue\cf0 :[\cf2 NSString\cf0  \cf4 stringWithFormat\cf0 :\cf8 @"%lu"\cf0 , (\cf7 unsigned\cf0  \cf7 long\cf0 )[postData \cf4 length\cf0 ]] \cf4 forHTTPHeaderField\cf0 :\cf8 @"Content-Length"\cf0 ];\
-    \
-    [request \cf4 setHTTPBody\cf0 :postData];\
-    \cf9 responseData\cf0  = [[\cf2 NSMutableData\cf0  \cf4 alloc\cf0 ]\cf4 init\cf0 ];\
-    \cf9 connectionReserve\cf0  =  [[\cf2 NSURLConnection\cf0  \cf4 alloc\cf0 ]\cf4 initWithRequest\cf0 :request \cf4 delegate\cf0 :\cf7 self\cf0 ];\
-    \
-    \
-    \
-\}\
-\
-\pard\tx674\pardeftab674\pardirnatural
-\cf6 #pragma mark -Nsurlconnection delegates\
+   \cf6 #pragma mark -Nsurlconnection delegates\
 #pragma mark JSON Delegates\
 \pard\tx674\pardeftab674\pardirnatural
 \cf0 \
 - (\cf7 void\cf0 )connection:(\cf2 NSURLConnection\cf0  *)connection didReceiveResponse:(\cf2 NSURLResponse\cf0  *)response\
 \{\
-    [\cf9 responseData\cf0  \cf4 setLength\cf0 :\cf10 0\cf0 ];\
+    [\cf8 responseData\cf0  \cf4 setLength\cf0 :\cf9 0\cf0 ];\
     \
 \}\
 \
 - (\cf7 void\cf0 )connection:(\cf2 NSURLConnection\cf0  *)connection didReceiveData:(\cf2 NSData\cf0  *)data\
 \{\
     \
-    [\cf9 responseData\cf0  \cf4 appendData\cf0 :data];\
+    [\cf8 responseData\cf0  \cf4 appendData\cf0 :data];\
     \
 \}\
 \
 - (\cf7 void\cf0 )connection:(\cf2 NSURLConnection\cf0  *)connection didFailWithError:(\cf2 NSError\cf0  *)error\
 \{\
-    \cf7 self\cf0 ->\cf9 responseData\cf0  = \cf7 nil\cf0 ;\
+    \cf7 self\cf0 ->\cf8 responseData\cf0  = \cf7 nil\cf0 ;\
     \
 \}\
 \
 \
 - (\cf7 void\cf0 )connectionDidFinishLoading:(\cf2 NSURLConnection\cf0  *)connection\
 \{\
-    \cf2 NSString\cf0  *responseString = [[\cf2 NSString\cf0  \cf4 alloc\cf0 ] \cf4 initWithData\cf0 :\cf9 responseData\cf0  \cf4 encoding\cf0 :\cf4 NSUTF8StringEncoding\cf0 ];\
+    \cf2 NSString\cf0  *responseString = [[\cf2 NSString\cf0  \cf4 alloc\cf0 ] \cf4 initWithData\cf0 :\cf8 responseData\cf0  \cf4 encoding\cf0 :\cf4 NSUTF8StringEncoding\cf0 ];\
     \
     \cf2 NSDictionary\cf0  *DictData = (\cf2 NSDictionary\cf0 *)[responseString \cf5 JSONValue\cf0 ];\
     \
-    \cf7 if\cf0  ([connection \cf4 isEqual\cf0 :\cf9 connectionReserve\cf0 ])\{\
-        \cf9 connectionReserve\cf0  = \cf7 nil\cf0 ;\
+    \cf7 if\cf0  ([connection \cf4 isEqual\cf0 :\cf8 connectionReserve\cf0 ])\{\
+        \cf8 connectionReserve\cf0  = \cf7 nil\cf0 ;\
         \
-        \cf7 if\cf0 ([[DictData \cf4 valueForKey\cf0 :\cf8 @"error"\cf0 ] \cf4 isEqualToString\cf0 :\cf8 @"1"\cf0 ])\{\
+        \cf7 if\cf0 ([[DictData \cf4 valueForKey\cf0 :\cf10 @"error"\cf0 ] \cf4 isEqualToString\cf0 :\cf10 @"1"\cf0 ])\{\
             \
-            \cf2 UIAlertView\cf0  *alert = [[\cf2 UIAlertView\cf0  \cf4 alloc\cf0 ]\cf4 initWithTitle\cf0 :\cf8 @"status"\cf0  \cf4 message\cf0 :[DictData \cf4 valueForKey\cf0 :\cf8 @"message"\cf0 ] \cf4 delegate\cf0 :\cf7 nil\cf0  \cf4 cancelButtonTitle\cf0 :\cf8 @"ok"\cf0  \cf4 otherButtonTitles\cf0 :\cf7 nil\cf0 ];\
+            \cf2 UIAlertView\cf0  *alert = [[\cf2 UIAlertView\cf0  \cf4 alloc\cf0 ]\cf4 initWithTitle\cf0 :\cf10 @"status"\cf0  \cf4 message\cf0 :[DictData \cf4 valueForKey\cf0 :\cf10 @"message"\cf0 ] \cf4 delegate\cf0 :\cf7 nil\cf0  \cf4 cancelButtonTitle\cf0 :\cf10 @"ok"\cf0  \cf4 otherButtonTitles\cf0 :\cf7 nil\cf0 ];\
 \
             [alert \cf4 show\cf0 ];\
         \}\
         \cf7 else\cf0 \{\
-            \cf9 exceptionAlertDismissed\cf0  = \cf7 TRUE\cf0 ;\
+            \cf8 exceptionAlertDismissed\cf0  = \cf7 TRUE\cf0 ;\
             \
         \}\
     \}\
